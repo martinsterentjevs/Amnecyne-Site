@@ -1,0 +1,7 @@
+﻿services:
+  amnecyne-site:
+    image: amnecyne-site
+    build:
+      context: .
+      dockerfile: Amnecyne-site/Dockerfile
+
