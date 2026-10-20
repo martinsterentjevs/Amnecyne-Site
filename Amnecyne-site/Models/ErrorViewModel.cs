@@ -1,4 +1,4 @@
-namespace Amnecyne_site.Models;
+namespace Amnecyne.Models;
 
 public class ErrorViewModel
 {

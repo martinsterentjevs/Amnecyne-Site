@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using Amnecyne_site.Models;
+using Amnecyne.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Amnecyne_site.Controllers;
+namespace Amnecyne.Controllers;
 
 public class HomeController : Controller
 {

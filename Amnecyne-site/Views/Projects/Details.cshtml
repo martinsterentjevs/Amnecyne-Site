@@ -1,0 +1,10 @@
+@model Amnecyne.DataModels.Project
+
+<h1>@Model.Name</h1>
+@{
+    if (!string.IsNullOrEmpty(@Model.Description))
+    {
+        <p>@Model.Description</p>   
+    }
+    
+}
