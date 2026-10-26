@@ -1,18 +1,21 @@
-
+@model (Amnecyne.DataModels.Project Project, System.Collections.Generic.List<Amnecyne.DataModels.ChangelogEntry> Entries)
 
 @{
-    Layout = null;
+    ViewData["Title"] = $"{Model.Project.Name} — Changelog";
 }
 
-<!DOCTYPE html>
+<h1>@Model.Project.Name — Changelog</h1>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+@if (Model.Entries.Count == 0)
+{
+    <p class="body-text">No changelog entries yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var entry in Model.Entries)
+        {
+            <li><strong>@entry.Date.ToString("yyyy-MM-dd")</strong> — @entry.Description</li>
+        }
+    </ul>
+}

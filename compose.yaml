@@ -4,6 +4,9 @@
     build:
       context: .
       dockerfile: Amnecyne-site/Dockerfile
+    ports:
+      - "7071:8080"
+      - "7072:8081"
     environment:
       ConnectionStrings__DefaultConnection: "Host=postgres;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
     depends_on:

@@ -1,17 +1,20 @@
 using System.Diagnostics;
 using Amnecyne.Models;
+using Amnecyne.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Amnecyne.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ProjectsService projectsService) : Controller
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
+    // HomeController
+public async Task<IActionResult> Index()
+{
+    var featured = await projectsService.GetFeaturedAsync();
+    return View(featured);
+}
 
-    public IActionResult Privacy()
+    public IActionResult AboutMe()
     {
         return View();
     }

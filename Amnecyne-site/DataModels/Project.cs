@@ -11,9 +11,10 @@ public class Project
     public string? GithubLink { get; set; } 
     public DateTime CreatedAt { get; set; } =  DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } =  DateTime.UtcNow;
-    public required string TechStack { get; set; }
+    public required List<Tag> Tags { get; set; } = new();
     public string? LatestRelease { get; set; } 
     public required string Slug { get; set; }
+    public required bool IsFeatured { get; set; } = false;
 }
 public enum GitVisibility
 {

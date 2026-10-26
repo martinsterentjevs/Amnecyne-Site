@@ -1,17 +1,22 @@
 using Amnecyne.DataModels;
+using Amnecyne.Models;
 
 namespace Amnecyne.Services;
 
 public class ProjectsService(DbService dbService, ILogger<ProjectsService> logger)
 {
-    public Project? GetBySlugId(string slugId)
-    {
-        return (Project?)dbService.GetBySlugId(slugId);
-    }
+    public Task<Project?> GetBySlugId(string slugId) => dbService.GetBySlugId(slugId);
 
-    public List<Project> GetAll()
+    public async Task<List<Project>> GetAllAsync()
     {
-        return dbService.GetAll();
+        return await dbService.GetAllAsync();
     }
+    /*public async Task<List<ProjectCardViewModel>> GetByTagAsync(string tag)
+    {
+        return await dbService.GetByTagAsync(tag);
+    }*/
+    public async Task<List<ChangelogEntry>> GetChangelogAsync(Guid projectId)
+        => await dbService.GetChangelogAsync(projectId);
     
+    public async Task<List<ProjectCardViewModel>> GetFeaturedAsync() => await dbService.GetFeaturedAsync();
 }

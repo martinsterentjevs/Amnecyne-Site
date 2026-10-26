@@ -1,15 +1,27 @@
-﻿@{
+﻿@model List<Amnecyne.Models.ProjectCardViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div>
-    <h1>Projects</h1>
-    <h2>Made by Mārtiņš Terentjevs</h2>
+<div class="page-container">
+    <div class="page-header">
+        <h1>Welcome to Amnecyne</h1>
+        <p class="body-text">This site is a hub for all projects made by me - Mārtiņš Terentjevs</p>
+        <p class="body-text">Below are a few featured projects. They're either recently updated or ones I want to show off.</p>
+    </div>
+
+    <div class="project-grid">
+        @foreach (var project in Model)
+        {
+            <a href="/projects/@project.Slug" class="project-card">
+                <h3>@project.Name</h3>
+                <p>@project.Description</p>
+            </a>
+        }
+    </div>
+
+    <div class="view-all-row">
+        <a asp-controller="Projects" asp-action="Index" class="btn-view-all">View all projects</a>
+    </div>
 </div>
-<table>
-    <thead>
-    @{
-        
-    }
-    </thead>
-</table>

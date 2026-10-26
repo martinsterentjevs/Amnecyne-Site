@@ -22,6 +22,27 @@ namespace Amnecyne.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Amnecyne.DataModels.ChangelogEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChangelogEntries");
+                });
+
             modelBuilder.Entity("Amnecyne.DataModels.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -41,6 +62,9 @@ namespace Amnecyne.Migrations
                     b.Property<int>("GithubVisibility")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LatestRelease")
                         .HasColumnType("text");
 
@@ -59,16 +83,61 @@ namespace Amnecyne.Migrations
                     b.Property<int>("State")
                         .HasColumnType("integer");
 
-                    b.Property<string>("TechStack")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Amnecyne.DataModels.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("ProjectTag", b =>
+                {
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProjectsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("ProjectTag");
+                });
+
+            modelBuilder.Entity("ProjectTag", b =>
+                {
+                    b.HasOne("Amnecyne.DataModels.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Amnecyne.DataModels.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
