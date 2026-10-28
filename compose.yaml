@@ -9,6 +9,8 @@
       - "7072:8081"
     environment:
       ConnectionStrings__DefaultConnection: "Host=postgres;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
+      Github__ClientId: ${GITHUB_CLIENT_ID}
+      Github__ClientSecret: ${GITHUB_CLIENT_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
