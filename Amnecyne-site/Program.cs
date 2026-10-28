@@ -46,18 +46,14 @@ builder.Services.AddAuthentication(options =>
 
         options.Events.OnCreatingTicket = context =>
         {
-            foreach (var claim in context.Identity!.Claims)
-            {
-                Console.WriteLine($"{claim.Type} = {claim.Value}");
-            }
-            /* COMMENTED OUT FOR TESTING
-            var login = context.Identity?.FindFirst("urn:github:login")?.Value;
+            var url = context.Identity?.FindFirst("urn:github:url")?.Value;
+            var username = url?.TrimEnd('/').Split('/').LastOrDefault();
             const string allowedLogin = "martinsterentjevs"; // TODO: move to pull from config
 
-            if (!string.Equals(login, allowedLogin, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(username, allowedLogin, StringComparison.OrdinalIgnoreCase))
             {
                 context.Fail("Unauthorized GitHub account.");
-            } */
+            } 
             return Task.CompletedTask;
         };
     });
