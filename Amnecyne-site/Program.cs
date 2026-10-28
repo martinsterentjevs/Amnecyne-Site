@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Amnecyne.Data;
 using Amnecyne.Services;
 using AspNet.Security.OAuth.GitHub;
@@ -46,11 +47,10 @@ builder.Services.AddAuthentication(options =>
 
         options.Events.OnCreatingTicket = context =>
         {
-            var url = context.Identity?.FindFirst("urn:github:url")?.Value;
-            var username = url?.TrimEnd('/').Split('/').LastOrDefault();
+            var loginName = context.Identity?.FindFirst(ClaimTypes.Name)?.Value;
             const string allowedLogin = "martinsterentjevs"; // TODO: move to pull from config
 
-            if (!string.Equals(username, allowedLogin, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(loginName, allowedLogin, StringComparison.OrdinalIgnoreCase))
             {
                 context.Fail("Unauthorized GitHub account.");
             } 
