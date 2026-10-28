@@ -47,11 +47,16 @@ builder.Services.AddAuthentication(options =>
 
         options.Events.OnCreatingTicket = context =>
         {
+            foreach (var claim in context.Identity!.Claims)
+            {
+                Console.WriteLine($"{claim.Type} = {claim.Value}");
+            }
             var loginName = context.Identity?.FindFirst(ClaimTypes.Name)?.Value;
             const string allowedLogin = "martinsterentjevs"; // TODO: move to pull from config
 
             if (!string.Equals(loginName, allowedLogin, StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine($"Verified Mismatch: Allowed name = {allowedLogin}, Actual name = {loginName}");
                 context.Fail("Unauthorized GitHub account.");
             } 
             return Task.CompletedTask;
