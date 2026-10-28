@@ -22,6 +22,7 @@ public class AuthController : Controller
     public IActionResult Login() =>
         Challenge(new AuthenticationProperties { RedirectUri = "/admin" }, GitHubAuthenticationDefaults.AuthenticationScheme);
 
+    [HttpGet("/logout")]
     [HttpPost("/logout")]
     public async Task<IActionResult> Logout()
     {
