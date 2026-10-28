@@ -1,5 +1,7 @@
 using Amnecyne.Data;
 using Amnecyne.Services;
+using AspNet.Security.OAuth.GitHub;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +29,34 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GitHubAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddGitHub(options =>
+    {
+        options.ClientId = builder.Configuration["GitHub:ClientId"]!;
+        options.ClientSecret = builder.Configuration["GitHub:ClientSecret"]!;
+        options.CallbackPath = "/signin-github";
+        options.Scope.Add("read:user");
 
+        options.Events.OnCreatingTicket = context =>
+        {
+            var login = context.Identity?.FindFirst("urn:github:login")?.Value;
+            const string allowedLogin = "martinsterentjevs"; // TODO: move to pull from config
+
+            if (!string.Equals(login, allowedLogin, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Fail("Unauthorized GitHub account.");
+            }
+
+            return Task.CompletedTask;
+        };
+    });
+
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseForwardedHeaders();   
@@ -55,6 +84,7 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
