@@ -1,9 +1,10 @@
 @model string
 @{
-    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
 }
 <input type="color"
        name="@name"
        id="@name"
        value="@Model"
+       class="form-control form-control-color"
        oninput="document.getElementById('project-form')?.style.setProperty('--focus-color', this.value)" />

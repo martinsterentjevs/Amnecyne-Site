@@ -3,13 +3,17 @@
     var allTags = (List<Amnecyne.DataModels.Tag>)ViewData["AllTags"]!;
     var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
 }
-<div class="tag-picker">
+<div class="border rounded p-2 d-flex flex-wrap gap-3">
+    @if (allTags.Count == 0)
+    {
+        <span class="text-muted small">No tags yet.</span>
+    }
     @for (var i = 0; i < allTags.Count; i++)
     {
         var tag = allTags[i];
-        <label>
-            <input type="checkbox" name="@name" value="@tag.Id" checked="@Model.Contains(tag.Id)" />
-            @tag.Name
-        </label>
+        <div class="form-check form-check-inline m-0">
+            <input type="checkbox" class="form-check-input" id="tag-@tag.Id" name="@name" value="@tag.Id" checked="@Model.Contains(tag.Id)" />
+            <label class="form-check-label" for="tag-@tag.Id">@tag.Name</label>
+        </div>
     }
 </div>
