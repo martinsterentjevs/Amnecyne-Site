@@ -88,4 +88,63 @@ public class DbService(AppDbContext db)
             .OrderByDescending(c => c.Date)
             .ToListAsync();
     }
+    internal Task<List<Tag>> GetAllTagsAsync()
+    {
+        return db.Tags.ToListAsync();
+    }
+
+    internal async Task<Project> CreateProjectAsync(ProjectFormViewModel vm)
+    {
+        var tags = await db.Tags.Where(t => vm.SelectedTagIds.Contains(t.Id)).ToListAsync();
+        var project = new Project
+        {
+            Id = Guid.NewGuid(),
+            Name = vm.Name,
+            Description = vm.Description,
+            Slug = vm.Slug,
+            PrimaryColor = vm.PrimaryColor,
+            State = vm.State,
+            GithubVisibility = vm.GithubVisibility,
+            GithubLink = vm.GithubLink,
+            LatestRelease = vm.LatestRelease,
+            IsFeatured = vm.IsFeatured,
+            Tags = tags,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        db.Projects.Add(project);
+        await db.SaveChangesAsync();
+        return project;
+    }
+
+    internal async Task UpdateProjectAsync(Guid id, ProjectFormViewModel vm)
+    {
+        var project = await db.Projects.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
+        if (project is null) return;
+
+        project.Name = vm.Name;
+        project.Description = vm.Description;
+        project.Slug = vm.Slug;
+        project.PrimaryColor = vm.PrimaryColor;
+        project.State = vm.State;
+        project.GithubVisibility = vm.GithubVisibility;
+        project.GithubLink = vm.GithubLink;
+        project.LatestRelease = vm.LatestRelease;
+        project.IsFeatured = vm.IsFeatured;
+        project.UpdatedAt = DateTime.UtcNow;
+
+        var tags = await db.Tags.Where(t => vm.SelectedTagIds.Contains(t.Id)).ToListAsync();
+        project.Tags.Clear();
+        foreach (var tag in tags) project.Tags.Add(tag);
+
+        await db.SaveChangesAsync();
+    }
+
+    internal async Task DeleteProjectAsync(Guid id)
+    {
+        var project = await db.Projects.FindAsync(id);
+        if (project is null) return;
+        db.Projects.Remove(project);
+        await db.SaveChangesAsync();
+    }
 }

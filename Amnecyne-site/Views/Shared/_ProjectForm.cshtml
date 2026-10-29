@@ -1,0 +1,37 @@
+@model Amnecyne.Models.ProjectFormViewModel
+
+<form id="project-form" class="admin-form" method="post" style="--focus-color: @Model.PrimaryColor;">
+    <input type="hidden" asp-for="Id" />
+
+    <label asp-for="Name"></label>
+    @Html.EditorFor(m => m.Name)
+
+    <label asp-for="Slug"></label>
+    @Html.EditorFor(m => m.Slug)
+
+    <label asp-for="Description"></label>
+    @Html.EditorFor(m => m.Description)
+
+    <label asp-for="PrimaryColor"></label>
+    @Html.EditorFor(m => m.PrimaryColor)
+
+    <label asp-for="State"></label>
+    @Html.EditorFor(m => m.State)
+
+    <label asp-for="GithubVisibility"></label>
+    @Html.EditorFor(m => m.GithubVisibility)
+
+    <label asp-for="GithubLink"></label>
+    @Html.EditorFor(m => m.GithubLink)
+
+    <label asp-for="LatestRelease"></label>
+    @Html.EditorFor(m => m.LatestRelease)
+
+    <label asp-for="IsFeatured"></label>
+    @Html.EditorFor(m => m.IsFeatured)
+
+    <label>Tags</label>
+    @Html.EditorFor(m => m.SelectedTagIds)
+
+    <button type="submit">Save</button>
+</form>

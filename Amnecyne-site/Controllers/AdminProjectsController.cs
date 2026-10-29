@@ -1,3 +1,4 @@
+using Amnecyne.Models;
 using Amnecyne.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +16,61 @@ public class AdminProjectsController(DbService dbService, IFileStorageService fi
         return View(projects);
     }
 
+    [HttpGet("create")]
+    public async Task<IActionResult> Create()
+    {
+        ViewData["AllTags"] = await dbService.GetAllTagsAsync();
+        return View(new ProjectFormViewModel());
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create(ProjectFormViewModel vm)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewData["AllTags"] = await dbService.GetAllTagsAsync();
+            return View(vm);
+        }
+        var project = await dbService.CreateProjectAsync(vm);
+        return RedirectToAction(nameof(Edit), new { id = project.Id });
+    }
+
     [HttpGet("{id:guid}/edit")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var project = await dbService.GetByIdAsync(id);
         if (project is null) return NotFound();
-        return View(project);
+        ViewData["AllTags"] = await dbService.GetAllTagsAsync();
+        return View(ProjectFormViewModel.FromEntity(project));
     }
 
+    [HttpPost("{id:guid}/edit")]
+    public async Task<IActionResult> Edit(Guid id, ProjectFormViewModel vm)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewData["AllTags"] = await dbService.GetAllTagsAsync();
+            return View(vm);
+        }
+        await dbService.UpdateProjectAsync(id, vm);
+        return RedirectToAction(nameof(Edit), new { id });
+    }
+
+    [HttpPost("{id:guid}/delete")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var project = await dbService.GetByIdAsync(id); // includes Images
+        if (project is null) return NotFound();
+
+        if (!string.IsNullOrEmpty(project.IconPath))
+            fileStorage.Delete(project.IconPath);
+        foreach (var img in project.Images)
+            fileStorage.Delete(img.Path);
+
+        await dbService.DeleteProjectAsync(id);
+        return RedirectToAction(nameof(Index));
+    }
+    
     [HttpPost("{id:guid}/icon")]
     public async Task<IActionResult> UploadIcon(Guid id, IFormFile file, CancellationToken ct)
     {

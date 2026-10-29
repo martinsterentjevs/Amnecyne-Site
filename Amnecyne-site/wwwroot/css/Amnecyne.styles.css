@@ -108,3 +108,19 @@ h1, h2, h3 {
     background: var(--color-ink);
     color: var(--color-paper);
 }
+/* Admin styling tokens */
+:root {
+    --focus-color: #6b7280; /* neutral grey default — non-project admin pages (Tag, dashboard) never override this */
+}
+
+.admin-form input:not([type="checkbox"]):not([type="color"]):focus-visible,
+.admin-form textarea:focus-visible,
+.admin-form select:focus-visible {
+    outline: none;
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-color) 35%, transparent);
+}
+
+.admin-form button[type="submit"] {
+    background: var(--focus-color);
+}

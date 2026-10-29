@@ -1,0 +1,15 @@
+@model List<Guid>
+@{
+    var allTags = (List<Amnecyne.DataModels.Tag>)ViewData["AllTags"]!;
+    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+}
+<div class="tag-picker">
+    @for (var i = 0; i < allTags.Count; i++)
+    {
+        var tag = allTags[i];
+        <label>
+            <input type="checkbox" name="@name" value="@tag.Id" checked="@Model.Contains(tag.Id)" />
+            @tag.Name
+        </label>
+    }
+</div>

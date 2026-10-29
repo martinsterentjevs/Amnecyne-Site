@@ -1,0 +1,32 @@
+@model Amnecyne.Models.ProjectFormViewModel
+<h2>Edit project</h2>
+@await Html.PartialAsync("_ProjectForm", Model)
+
+<section class="admin-form" style="--focus-color: @Model.PrimaryColor;">
+    <h3>Icon</h3>
+    @if (Model.IconPath is not null)
+    {
+        <img src="/uploads/@Model.IconPath" alt="" width="64" height="64" />
+    }
+    <form method="post" action="/admin/projects/@Model.Id/icon" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/png,image/jpeg,image/webp" />
+        <button type="submit">Replace icon</button>
+    </form>
+
+    <h3>Showcase photos</h3>
+    <div class="showcase-grid">
+        @foreach (var img in Model.Images.OrderBy(i => i.SortOrder))
+        {
+            <div class="showcase-item">
+                <img src="/uploads/@img.Path" alt="@img.Caption" />
+                <form method="post" action="/admin/projects/@Model.Id/images/@img.Id/delete">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        }
+    </div>
+    <form method="post" action="/admin/projects/@Model.Id/images" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/png,image/jpeg,image/webp" />
+        <button type="submit">Add photo</button>
+    </form>
+</section>

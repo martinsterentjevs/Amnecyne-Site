@@ -1,0 +1,31 @@
+@model List<Amnecyne.DataModels.Project>
+<h2>Projects</h2>
+<a href="/admin/projects/create">New project</a>
+<table class="admin-index">
+    <thead>
+    <tr><th></th><th>Name</th><th>State</th><th>Featured</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>
+                @if (p.IconPath is not null)
+                {
+                    <img src="/uploads/@p.IconPath" width="24" height="24" alt="" />
+                }
+                <span class="color-swatch" style="background:@p.PrimaryColor"></span>
+            </td>
+            <td>@p.Name</td>
+            <td>@p.State</td>
+            <td>@(p.IsFeatured ? "★" : "")</td>
+            <td>
+                <a href="/admin/projects/@p.Id/edit">Edit</a>
+                <form method="post" action="/admin/projects/@p.Id/delete" style="display:inline" onsubmit="return confirm('Delete @p.Name?')">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
