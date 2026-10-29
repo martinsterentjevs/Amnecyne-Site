@@ -117,7 +117,7 @@ namespace Amnecyne.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectImage");
+                    b.ToTable("ProjectImages");
                 });
 
             modelBuilder.Entity("Amnecyne.DataModels.Tag", b =>
