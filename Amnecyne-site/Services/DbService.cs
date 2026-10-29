@@ -28,6 +28,7 @@ public class DbService(AppDbContext db)
     {
         return db.Projects
             .Include(p => p.Images.OrderBy(i => i.SortOrder))
+            .Include(p => p.Tags)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 

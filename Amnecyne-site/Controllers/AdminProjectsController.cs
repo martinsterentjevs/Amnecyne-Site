@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Amnecyne.Controllers;
 
 [Authorize]
+[ValidateAntiForgeryToken]
 [Route("admin/projects")]
 public class AdminProjectsController(DbService dbService, IFileStorageService fileStorage) : Controller
 {
@@ -81,7 +82,7 @@ public class AdminProjectsController(DbService dbService, IFileStorageService fi
         var relativePath = await fileStorage.SaveAsync(id, "icon", "icon", file, ct);
         await dbService.UpdateIconPathAsync(id, relativePath);
 
-        if (!string.IsNullOrEmpty(oldPath))
+        if (!string.IsNullOrEmpty(oldPath) && oldPath != relativePath)
             fileStorage.Delete(oldPath);
 
         return RedirectToAction(nameof(Edit), new { id });

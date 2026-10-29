@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Amnecyne.Services;
 
-public class LocalFileStorageService : IFileStorageService
+public class LocalFileStorageService(IWebHostEnvironment env) : IFileStorageService
 {
-    private readonly string _root;
+    private readonly string _root = Path.Combine(env.WebRootPath, "uploads");
     private const long MaxBytes = 5 * 1024 * 1024; // 5 MB
 
     private static readonly Dictionary<string, byte[]> MagicBytes = new()
@@ -14,11 +14,6 @@ public class LocalFileStorageService : IFileStorageService
         [".jpeg"] = new byte[] { 0xFF, 0xD8, 0xFF },
         // webp checked separately below (RIFF....WEBP)
     };
-
-    public LocalFileStorageService(IWebHostEnvironment env)
-    {
-        _root = Path.Combine(env.WebRootPath, "uploads");
-    }
 
     public async Task<string> SaveAsync(Guid projectId, string subfolder, string fileNameWithoutExt, IFormFile file, CancellationToken ct = default)
     {

@@ -21,7 +21,7 @@
             <td>@(p.IsFeatured ? "★" : "")</td>
             <td>
                 <a href="/admin/projects/@p.Id/edit">Edit</a>
-                <form method="post" action="/admin/projects/@p.Id/delete" style="display:inline" onsubmit="return confirm('Delete @p.Name?')">
+                <form method="post" action="/admin/projects/@p.Id/delete" style="display:inline" onsubmit="return confirm('Delete @System.Text.Json.JsonSerializer.Serialize(p.Name)?')">
                     <button type="submit">Delete</button>
                 </form>
             </td>
