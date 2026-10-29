@@ -3,56 +3,57 @@
 <form id="project-form" class="admin-form" method="post" style="--focus-color: @Model.PrimaryColor;">
     <input type="hidden" asp-for="Id" />
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger small"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="Slug" class="form-label"></label>
-            <input asp-for="Slug" class="form-control" />
-            <span asp-validation-for="Slug" class="text-danger small"></span>
-        </div>
-
-        <div class="col-12">
-            <label asp-for="Description" class="form-label"></label>
-            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-        </div>
-
-        <div class="col-md-3">
-            <label asp-for="PrimaryColor" class="form-label"></label>
-            @Html.EditorFor(m => m.PrimaryColor)
-        </div>
-        <div class="col-md-3">
-            <label asp-for="State" class="form-label"></label>
-            <select asp-for="State" class="form-select" asp-items="Html.GetEnumSelectList<Amnecyne.DataModels.ProjectState>()"></select>
-        </div>
-        <div class="col-md-3">
-            <label asp-for="GithubVisibility" class="form-label"></label>
-            <select asp-for="GithubVisibility" class="form-select" asp-items="Html.GetEnumSelectList<Amnecyne.DataModels.GitVisibility>()"></select>
-        </div>
-        <div class="col-md-3 d-flex align-items-center">
-            <div class="form-check mt-4">
-                <input asp-for="IsFeatured" class="form-check-input" />
-                <label asp-for="IsFeatured" class="form-check-label"></label>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <label asp-for="GithubLink" class="form-label"></label>
-            <input asp-for="GithubLink" class="form-control" />
-        </div>
-        <div class="col-md-6">
-            <label asp-for="LatestRelease" class="form-label"></label>
-            <input asp-for="LatestRelease" class="form-control" />
-        </div>
-
-        <div class="col-12">
-            <label class="form-label">Tags</label>
-            @Html.EditorFor(m => m.SelectedTagIds)
-        </div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger small"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-4">Save</button>
+    <div class="mb-3">
+        <label asp-for="Slug" class="form-label"></label>
+        <input asp-for="Slug" class="form-control" />
+        <span asp-validation-for="Slug" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PrimaryColor" class="form-label d-block"></label>
+        @Html.EditorFor(m => m.PrimaryColor)
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="State" class="form-label"></label>
+        <select asp-for="State" class="form-select" asp-items="Html.GetEnumSelectList<Amnecyne.DataModels.ProjectState>()"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GithubVisibility" class="form-label"></label>
+        <select asp-for="GithubVisibility" class="form-select" asp-items="Html.GetEnumSelectList<Amnecyne.DataModels.GitVisibility>()"></select>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsFeatured" class="form-check-input" />
+        <label asp-for="IsFeatured" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GithubLink" class="form-label"></label>
+        <input asp-for="GithubLink" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LatestRelease" class="form-label"></label>
+        <input asp-for="LatestRelease" class="form-control" />
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label">Tags</label>
+        @Html.EditorFor(m => m.SelectedTagIds)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
