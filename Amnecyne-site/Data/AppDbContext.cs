@@ -8,4 +8,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options):DbContext (opt
     public DbSet<Project>  Projects { get; set; }
     public DbSet<ChangelogEntry>  ChangelogEntries { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<ProjectImage> ProjectImages { get; set; }
 }

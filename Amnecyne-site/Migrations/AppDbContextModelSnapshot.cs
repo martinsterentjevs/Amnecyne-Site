@@ -17,7 +17,7 @@ namespace Amnecyne.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -62,6 +62,9 @@ namespace Amnecyne.Migrations
                     b.Property<int>("GithubVisibility")
                         .HasColumnType("integer");
 
+                    b.Property<string>("IconPath")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("boolean");
 
@@ -89,6 +92,32 @@ namespace Amnecyne.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Amnecyne.DataModels.ProjectImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectImage");
                 });
 
             modelBuilder.Entity("Amnecyne.DataModels.Tag", b =>
@@ -125,6 +154,17 @@ namespace Amnecyne.Migrations
                     b.ToTable("ProjectTag");
                 });
 
+            modelBuilder.Entity("Amnecyne.DataModels.ProjectImage", b =>
+                {
+                    b.HasOne("Amnecyne.DataModels.Project", "Project")
+                        .WithMany("Images")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("ProjectTag", b =>
                 {
                     b.HasOne("Amnecyne.DataModels.Project", null)
@@ -138,6 +178,11 @@ namespace Amnecyne.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Amnecyne.DataModels.Project", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

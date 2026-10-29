@@ -14,6 +14,8 @@
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - project-uploads:/app/wwwroot/uploads
   postgres:
     image: postgres:17-alpine
     environment:
@@ -31,3 +33,4 @@
       - "5432:5432"
 volumes:
   pgdata:
+  project-uploads:
