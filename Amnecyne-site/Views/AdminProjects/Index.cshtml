@@ -1,31 +1,41 @@
-@model List<Amnecyne.DataModels.Project>
-<h2>Projects</h2>
-<a href="/admin/projects/create">New project</a>
-<table class="admin-index">
-    <thead>
-    <tr><th></th><th>Name</th><th>State</th><th>Featured</th><th></th></tr>
-    </thead>
-    <tbody>
-    @foreach (var p in Model)
-    {
-        <tr>
-            <td>
-                @if (p.IconPath is not null)
+@model Amnecyne.Models.ProjectFormViewModel
+<div class="container py-4">
+    <h2 class="mb-4">Edit project</h2>
+    @await Html.PartialAsync("_ProjectForm", Model)
+
+    <div class="card mt-4" style="--focus-color: @Model.PrimaryColor;">
+        <div class="card-body">
+            <h5 class="card-title">Icon</h5>
+            @if (Model.IconPath is not null)
+            {
+                <img src="/uploads/@Model.IconPath" alt="" class="img-thumbnail mb-2" width="64" height="64" />
+            }
+            <form method="post" action="/admin/projects/@Model.Id/icon" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+                <input type="file" name="file" accept="image/png,image/jpeg,image/webp" class="form-control" style="max-width: 20rem;" />
+                <button type="submit" class="btn btn-outline-secondary text-nowrap">Replace icon</button>
+            </form>
+
+            <h5 class="card-title mt-4">Showcase photos</h5>
+            <div class="row row-cols-2 row-cols-md-4 g-3 mb-3">
+                @foreach (var img in Model.Images.OrderBy(i => i.SortOrder))
                 {
-                    <img src="/uploads/@p.IconPath" width="24" height="24" alt="" />
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="/uploads/@img.Path" alt="@img.Caption" class="card-img-top" style="aspect-ratio: 1; object-fit: cover;" />
+                            <div class="card-body p-2 text-end">
+                                <form method="post" action="/admin/projects/@Model.Id/images/@img.Id/delete">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 }
-                <span class="color-swatch" style="background:@p.PrimaryColor"></span>
-            </td>
-            <td>@p.Name</td>
-            <td>@p.State</td>
-            <td>@(p.IsFeatured ? "★" : "")</td>
-            <td>
-                <a href="/admin/projects/@p.Id/edit">Edit</a>
-                <form method="post" action="/admin/projects/@p.Id/delete" style="display:inline" onsubmit="return confirm('Delete @System.Text.Json.JsonSerializer.Serialize(p.Name)?')">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+            </div>
+            <form method="post" action="/admin/projects/@Model.Id/images" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+                <input type="file" name="file" accept="image/png,image/jpeg,image/webp" class="form-control" style="max-width: 20rem;" />
+                <button type="submit" class="btn btn-outline-secondary text-nowrap">Add photo</button>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
