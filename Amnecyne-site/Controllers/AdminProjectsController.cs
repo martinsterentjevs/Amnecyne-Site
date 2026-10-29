@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Amnecyne.Controllers;
 
 [Authorize]
-[ValidateAntiForgeryToken]
+[AutoValidateAntiforgeryToken]
 [Route("admin/projects")]
 public class AdminProjectsController(DbService dbService, IFileStorageService fileStorage) : Controller
 {
