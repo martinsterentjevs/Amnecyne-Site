@@ -1,5 +1,40 @@
-
-<div>
-    <h1>This is the soon-to-be admin page side.</h1> 
-    <p>If you see this it means Account "martinsterentjevs" is let through, if you used different, something is screwed</p>
+@{
+    ViewData["Title"] = "Admin";
+}
+<div class="container mt-5">
+    <h1 class="mb-4">Admin</h1>
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+            <a href="/admin/projects" class="card admin-nav-card h-100 shadow-sm text-decoration-none text-reset">
+                <div class="card-body">
+                    <h5 class="card-title">Projects</h5>
+                    <p class="card-text text-muted mb-0">Portfolio projects, tags, icon and showcase photos.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/admin/changelog" class="card admin-nav-card h-100 shadow-sm text-decoration-none text-reset">
+                <div class="card-body">
+                    <h5 class="card-title">Changelog</h5>
+                    <p class="card-text text-muted mb-0">Per-project update log entries.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/admin/releases" class="card admin-nav-card h-100 shadow-sm text-decoration-none text-reset">
+                <div class="card-body">
+                    <h5 class="card-title">Releases</h5>
+                    <p class="card-text text-muted mb-0">Versioned downloads shown on project pages.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <a href="/admin/blog" class="card admin-nav-card h-100 shadow-sm text-decoration-none text-reset">
+                <div class="card-body">
+                    <h5 class="card-title">Blog posts</h5>
+                    <p class="card-text text-muted mb-0">Longer-form updates for each project.</p>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>

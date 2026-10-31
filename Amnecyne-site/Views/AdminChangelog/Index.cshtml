@@ -1,0 +1,39 @@
+@model List<Amnecyne.DataModels.ChangelogEntry>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Changelog</h1>
+        <a href="/admin/changelog/create" class="btn btn-primary">New entry</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table project-accent-table table-hover align-middle border-top">
+                <thead class="table-light">
+                <tr><th>Project</th><th>Date</th><th>Description</th><th class="text-end">Actions</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr style="--project-color: @c.Project?.PrimaryColor;">
+                        <td class="fw-bold"><span class="project-accent-dot"></span>@c.Project?.Name</td>
+                        <td>@c.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@(c.Description.Length > 80 ? c.Description[..80] + "…" : c.Description)</td>
+                        <td class="text-end">
+                            <a href="/admin/changelog/@c.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
+                            <form method="post" action="/admin/changelog/@c.Id/delete" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No changelog entries yet.</div>
+    }
+</div>

@@ -240,4 +240,45 @@ internal async Task DeleteBlogPostAsync(Guid id)
     await db.SaveChangesAsync();
 }
 
+internal Task<List<ChangelogEntry>> GetAllChangelogEntriesAsync()
+{
+    return db.ChangelogEntries.Include(c => c.Project).OrderByDescending(c => c.Date).ToListAsync();
+}
+
+internal Task<ChangelogEntry?> GetChangelogEntryByIdAsync(Guid id)
+{
+    return db.ChangelogEntries.FirstOrDefaultAsync(c => c.Id == id);
+}
+
+internal async Task<ChangelogEntry> CreateChangelogEntryAsync(ChangelogFormViewModel vm)
+{
+    var entry = new ChangelogEntry
+    {
+        Id = Guid.NewGuid(),
+        ProjectId = vm.ProjectId,
+        Date = vm.Date,
+        Description = vm.Description
+    };
+    db.ChangelogEntries.Add(entry);
+    await db.SaveChangesAsync();
+    return entry;
+}
+
+internal async Task UpdateChangelogEntryAsync(Guid id, ChangelogFormViewModel vm)
+{
+    var entry = await db.ChangelogEntries.FindAsync(id);
+    if (entry is null) return;
+    entry.ProjectId = vm.ProjectId;
+    entry.Date = vm.Date;
+    entry.Description = vm.Description;
+    await db.SaveChangesAsync();
+}
+
+internal async Task DeleteChangelogEntryAsync(Guid id)
+{
+    var entry = await db.ChangelogEntries.FindAsync(id);
+    if (entry is null) return;
+    db.ChangelogEntries.Remove(entry);
+    await db.SaveChangesAsync();
+}
 }

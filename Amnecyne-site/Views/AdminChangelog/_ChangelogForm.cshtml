@@ -1,0 +1,23 @@
+@model Amnecyne.Models.ChangelogFormViewModel
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="ProjectId" class="form-label"></label>
+        @Html.EditorFor(m => m.ProjectId)
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Date" class="form-label"></label>
+        <input asp-for="Date" class="form-control" type="date" />
+    </div>
+
+    <div class="mb-4">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger small"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
