@@ -1,41 +1,55 @@
-@model Amnecyne.DataModels.Project
-<div class="container py-4">
-    <h2 class="mb-4">Edit project</h2>
-    @await Html.PartialAsync("_ProjectForm", Model)
+@model List<Amnecyne.DataModels.Project>
 
-    <div class="card mt-4" style="--focus-color: @Model.PrimaryColor;">
-        <div class="card-body">
-            <h5 class="card-title">Icon</h5>
-            @if (Model.IconPath is not null)
-            {
-                <img src="/uploads/@Model.IconPath" alt="" class="img-thumbnail mb-2" width="64" height="64" />
-            }
-            <form method="post" action="/admin/projects/@Model.Id/icon" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
-                <input type="file" name="file" accept="image/png,image/jpeg,image/webp" class="form-control" style="max-width: 20rem;" />
-                <button type="submit" class="btn btn-outline-secondary text-nowrap">Replace icon</button>
-            </form>
-
-            <h5 class="card-title mt-4">Showcase photos</h5>
-            <div class="row row-cols-2 row-cols-md-4 g-3 mb-3">
-                @foreach (var img in Model.Images.OrderBy(i => i.SortOrder))
-                {
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="/uploads/@img.Path" alt="@img.Caption" class="card-img-top" style="aspect-ratio: 1; object-fit: cover;" />
-                            <div class="card-body p-2 text-end">
-                                <form method="post" action="/admin/projects/@Model.Id/images/@img.Id/delete">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-            <form method="post" action="/admin/projects/@Model.Id/images" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
-                <input type="file" name="file" accept="image/png,image/jpeg,image/webp" class="form-control" style="max-width: 20rem;" />
-                <button type="submit" class="btn btn-outline-secondary text-nowrap">Add photo</button>
-            </form>
-        </div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Projects</h1>
+        <a href="/admin/projects/create" class="btn btn-primary">New project</a>
     </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table project-accent-table table-hover align-middle border-top">
+                <thead class="table-light">
+                <tr>
+                    <th></th>
+                    <th>Project</th>
+                    <th>Status</th>
+                    <th>Featured</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr style="--project-color: @p.PrimaryColor;">
+                        <td>
+                            @if (p.IconPath is not null)
+                            {
+                                <img src="/uploads/@p.IconPath" width="28" height="28" class="rounded" alt="" />
+                            }
+                            else
+                            {
+                                <span class="project-accent-dot"></span>
+                            }
+                        </td>
+                        <td class="fw-bold">@p.Name</td>
+                        <td><span class="badge bg-secondary">@p.State</span></td>
+                        <td>@(p.IsFeatured ? "★" : "")</td>
+                        <td class="text-end">
+                            <a href="/admin/projects/@p.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
+                            <form method="post" action="/admin/projects/@p.Id/delete" class="d-inline" onsubmit="return confirm(@System.Text.Json.JsonSerializer.Serialize("Delete " + p.Name + "?"))">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No projects yet. Create one to get started.</div>
+    }
 </div>
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }

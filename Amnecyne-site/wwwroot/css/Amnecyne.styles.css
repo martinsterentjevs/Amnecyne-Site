@@ -108,6 +108,31 @@ h1, h2, h3 {
     background: var(--color-ink);
     color: var(--color-paper);
 }
+/* === Project-accent table — shared between public project list and admin project list === */
+.project-accent-table tbody tr {
+    transition: all 0.2s ease-in-out;
+    border-bottom: 2px solid transparent;
+}
+
+.project-accent-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-bottom-color: var(--project-color);
+    transform: translateX(4px);
+}
+
+.project-accent-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.project-accent-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--project-color);
+    margin-right: 10px;
+}
+
 /* Admin styling tokens */
 :root {
     --focus-color: #6b7280;
