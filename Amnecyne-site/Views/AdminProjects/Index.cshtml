@@ -38,7 +38,7 @@
                         <td>@(p.IsFeatured ? "★" : "")</td>
                         <td class="text-end">
                             <a href="/admin/projects/@p.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
-                            <form method="post" action="/admin/projects/@p.Id/delete" class="d-inline" onsubmit="return confirm(@System.Text.Json.JsonSerializer.Serialize("Delete " + p.Name + "?"))">
+                            <form asp-antiforgery="true" method="post" action="/admin/projects/@p.Id/delete" class="d-inline" onsubmit="return confirm(@System.Text.Json.JsonSerializer.Serialize("Delete " + p.Name + "?"))">
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
                         </td>

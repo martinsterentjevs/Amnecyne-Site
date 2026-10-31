@@ -18,7 +18,7 @@
                     <td><code>@t.Slug</code></td>
                     <td class="text-end">
                         <a href="/admin/tags/@t.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
-                        <form method="post" action="/admin/tags/@t.Id/delete" class="d-inline">
+                        <form asp-antiforgery="true" method="post" action="/admin/tags/@t.Id/delete" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                         </form>
                     </td>
