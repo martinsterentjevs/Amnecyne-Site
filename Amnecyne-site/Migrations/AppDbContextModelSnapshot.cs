@@ -22,6 +22,37 @@ namespace Amnecyne.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Amnecyne.DataModels.BlogPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("BlogPosts");
+                });
+
             modelBuilder.Entity("Amnecyne.DataModels.ChangelogEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,9 +98,6 @@ namespace Amnecyne.Migrations
 
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LatestRelease")
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,6 +148,36 @@ namespace Amnecyne.Migrations
                     b.ToTable("ProjectImages");
                 });
 
+            modelBuilder.Entity("Amnecyne.DataModels.ProjectRelease", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DownloadUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectReleases");
+                });
+
             modelBuilder.Entity("Amnecyne.DataModels.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -154,10 +212,32 @@ namespace Amnecyne.Migrations
                     b.ToTable("ProjectTag");
                 });
 
+            modelBuilder.Entity("Amnecyne.DataModels.BlogPost", b =>
+                {
+                    b.HasOne("Amnecyne.DataModels.Project", "Project")
+                        .WithMany("BlogPosts")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Amnecyne.DataModels.ProjectImage", b =>
                 {
                     b.HasOne("Amnecyne.DataModels.Project", "Project")
                         .WithMany("Images")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Amnecyne.DataModels.ProjectRelease", b =>
+                {
+                    b.HasOne("Amnecyne.DataModels.Project", "Project")
+                        .WithMany("Releases")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -182,7 +262,11 @@ namespace Amnecyne.Migrations
 
             modelBuilder.Entity("Amnecyne.DataModels.Project", b =>
                 {
+                    b.Navigation("BlogPosts");
+
                     b.Navigation("Images");
+
+                    b.Navigation("Releases");
                 });
 #pragma warning restore 612, 618
         }

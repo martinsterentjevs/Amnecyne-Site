@@ -9,4 +9,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options):DbContext (opt
     public DbSet<ChangelogEntry>  ChangelogEntries { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<ProjectImage> ProjectImages { get; set; }
+    public DbSet<ProjectRelease> ProjectReleases { get; set; }
+    public DbSet<BlogPost> BlogPosts { get; set; }
 }

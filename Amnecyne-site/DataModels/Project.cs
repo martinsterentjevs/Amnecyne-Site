@@ -12,12 +12,12 @@ public class Project
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public required List<Tag> Tags { get; set; } = new();
-    public string? LatestRelease { get; set; } 
     public required string Slug { get; set; }
     public required bool IsFeatured { get; set; } = false;
-
     public string? IconPath { get; set; }
     public List<ProjectImage> Images { get; set; } = new();
+    public List<ProjectRelease> Releases { get; set; } = new();
+    public List<BlogPost> BlogPosts { get; set; } = new();
 }
 
 public enum GitVisibility

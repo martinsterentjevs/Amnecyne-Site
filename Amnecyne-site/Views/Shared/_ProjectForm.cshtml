@@ -45,11 +45,6 @@
         <input asp-for="GithubLink" class="form-control" />
     </div>
 
-    <div class="mb-3">
-        <label asp-for="LatestRelease" class="form-label"></label>
-        <input asp-for="LatestRelease" class="form-control" />
-    </div>
-
     <div class="mb-4">
         <label class="form-label">Tags</label>
         @Html.EditorFor(m => m.SelectedTagIds)

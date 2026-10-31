@@ -29,6 +29,8 @@ public class DbService(AppDbContext db)
         return db.Projects
             .Include(p => p.Images.OrderBy(i => i.SortOrder))
             .Include(p => p.Tags)
+            .Include(p => p.Releases.OrderByDescending(r => r.ReleaseDate))
+            .Include(p => p.BlogPosts.OrderByDescending(b => b.PublishedAt))
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -107,7 +109,6 @@ public class DbService(AppDbContext db)
             State = vm.State,
             GithubVisibility = vm.GithubVisibility,
             GithubLink = vm.GithubLink,
-            LatestRelease = vm.LatestRelease,
             IsFeatured = vm.IsFeatured,
             Tags = tags,
             CreatedAt = DateTime.UtcNow,
@@ -130,7 +131,6 @@ public class DbService(AppDbContext db)
         project.State = vm.State;
         project.GithubVisibility = vm.GithubVisibility;
         project.GithubLink = vm.GithubLink;
-        project.LatestRelease = vm.LatestRelease;
         project.IsFeatured = vm.IsFeatured;
         project.UpdatedAt = DateTime.UtcNow;
 

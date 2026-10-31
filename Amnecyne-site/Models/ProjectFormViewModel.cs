@@ -27,9 +27,6 @@ public class ProjectFormViewModel
     [Display(Name = "GitHub Link")]
     public string? GithubLink { get; set; }
 
-    [Display(Name = "Latest Release")]
-    public string? LatestRelease { get; set; }
-
     public bool IsFeatured { get; set; }
 
     [UIHint("TagPicker")]
@@ -38,6 +35,8 @@ public class ProjectFormViewModel
     // display-only, not posted back from the main form
     public string? IconPath { get; set; }
     public List<ProjectImage> Images { get; set; } = new();
+    public List<ProjectRelease> Releases { get; set; } = new();
+    public List<BlogPost> BlogPosts { get; set; } = new();
 
     public static ProjectFormViewModel FromEntity(Project p) => new()
     {
@@ -49,10 +48,11 @@ public class ProjectFormViewModel
         State = p.State,
         GithubVisibility = p.GithubVisibility,
         GithubLink = p.GithubLink,
-        LatestRelease = p.LatestRelease,
         IsFeatured = p.IsFeatured,
         SelectedTagIds = p.Tags.Select(t => t.Id).ToList(),
         IconPath = p.IconPath,
-        Images = p.Images
+        Images = p.Images,
+        Releases = p.Releases,
+        BlogPosts = p.BlogPosts
     };
 }
