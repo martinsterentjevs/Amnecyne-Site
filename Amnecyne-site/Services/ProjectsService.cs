@@ -19,4 +19,7 @@ public class ProjectsService(DbService dbService, ILogger<ProjectsService> logge
         => await dbService.GetChangelogAsync(projectId);
     
     public async Task<List<ProjectCardViewModel>> GetFeaturedAsync() => await dbService.GetFeaturedAsync();
+    public Task<BlogPost?> GetBlogPostBySlugAsync(string projectSlug, string postSlug)
+        => dbService.GetBlogPostBySlugAsync(projectSlug, postSlug);
+    
 }

@@ -32,4 +32,11 @@ public class ProjectsController(ProjectsService projectsService) : Controller
         var entries = await projectsService.GetChangelogAsync(project.Id);
         return View((project, entries));
     }
+    [HttpGet("{slug}/blog/{postSlug}")]
+    public async Task<IActionResult> BlogPost(string slug, string postSlug)
+    {
+        var post = await projectsService.GetBlogPostBySlugAsync(slug, postSlug);
+        if (post == null) return NotFound();
+        return View(post);
+    }
 }

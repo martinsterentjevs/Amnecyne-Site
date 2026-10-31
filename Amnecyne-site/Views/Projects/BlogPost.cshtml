@@ -1,0 +1,10 @@
+@model Amnecyne.DataModels.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+<div class="container py-5" style="max-width: 720px;">
+    <p><a href="/projects/@Model.Project?.Slug" class="link-secondary">&larr; Back to @Model.Project?.Name</a></p>
+    <h1 class="mb-2">@Model.Title</h1>
+    <p class="text-muted mb-4">@Model.PublishedAt.ToString("MMMM d, yyyy")</p>
+    <div style="white-space: pre-wrap;">@Model.Body</div>
+</div>

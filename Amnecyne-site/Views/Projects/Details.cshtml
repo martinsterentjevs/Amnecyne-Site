@@ -1,10 +1,134 @@
 @model Amnecyne.DataModels.Project
 
-<h1>@Model.Name</h1>
 @{
-    if (!string.IsNullOrEmpty(@Model.Description))
-    {
-        <p>@Model.Description</p>   
-    }
-    
+    ViewData["Title"] = Model.Name;
+    var latestRelease = Model.Releases.OrderByDescending(r => r.ReleaseDate).FirstOrDefault();
+    var hasRepo = Model.GithubVisibility == Amnecyne.DataModels.GitVisibility.Public && !string.IsNullOrEmpty(Model.GithubLink);
+    var hasBlog = Model.BlogPosts.Any();
 }
+
+<div class="project-hero" style="--project-color: @Model.PrimaryColor;">
+    <div class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-md-8">
+                <h1 class="text-white mb-3">@Model.Name</h1>
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <p class="text-white-50 mb-4">@Model.Description</p>
+                }
+                <div class="d-flex gap-2 flex-wrap">
+                    @if (latestRelease is not null)
+                    {
+                        <a href="@latestRelease.DownloadUrl" class="btn btn-light">Download</a>
+                    }
+                    @if (hasRepo)
+                    {
+                        <a href="@Model.GithubLink" class="btn btn-outline-light">View Repo</a>
+                    }
+                    @if (latestRelease is null && !hasRepo)
+                    {
+                        if (hasBlog)
+                        {
+                            <a href="#blog" class="btn btn-outline-light">View Blog posts</a>
+                        }
+                        else
+                        {
+                            <span class="btn btn-outline-light disabled">More info soon</span>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                @if (Model.IconPath is not null)
+                {
+                    <img src="/uploads/@Model.IconPath" alt="" class="rounded shadow" width="96" height="96" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-md-6">
+            <h5>Recent Releases</h5>
+            @if (Model.Releases.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var r in Model.Releases.OrderByDescending(r => r.ReleaseDate).Take(5))
+                    {
+                        <li class="mb-2">
+                            <a href="@r.DownloadUrl" class="fw-bold text-decoration-none">@r.Version</a>
+                            <span class="text-muted small"> — @r.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                            @if (!string.IsNullOrEmpty(r.Notes))
+                            {
+                                <div class="text-muted small">@r.Notes</div>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No releases yet.</p>
+            }
+        </div>
+        <div class="col-md-6">
+            <h5>Tags</h5>
+            @if (Model.Tags.Any())
+            {
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var t in Model.Tags)
+                    {
+                        <span class="badge text-bg-secondary">@t.Name</span>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No tags.</p>
+            }
+        </div>
+        <div class="col-md-6" id="blog">
+            <h5>Recent Blog posts</h5>
+            @if (Model.BlogPosts.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var b in Model.BlogPosts.OrderByDescending(b => b.PublishedAt).Take(5))
+                    {
+                        <li class="mb-2">
+                            <a href="/projects/@Model.Slug/blog/@b.Slug" class="fw-bold text-decoration-none">@b.Title</a>
+                            <span class="text-muted small"> — @b.PublishedAt.ToString("yyyy-MM-dd")</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No posts yet.</p>
+            }
+        </div>
+        <div class="col-md-6">
+            <h5>Gallery</h5>
+            @if (Model.Images.Any())
+            {
+                <div class="row row-cols-3 g-2">
+                    @foreach (var img in Model.Images.OrderBy(i => i.SortOrder))
+                    {
+                        <div class="col">
+                            <img src="/uploads/@img.Path" alt="@img.Caption" class="img-fluid rounded" style="aspect-ratio:1; object-fit:cover;" />
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No showcase photos yet.</p>
+            }
+        </div>
+    </div>
+
+    <p class="mt-4">
+        <a href="/projects/@Model.Slug/changelog" class="link-secondary">View full changelog &rarr;</a>
+    </p>
+</div>

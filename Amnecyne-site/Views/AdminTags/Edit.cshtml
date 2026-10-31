@@ -1,0 +1,6 @@
+@model Amnecyne.Models.TagFormViewModel
+<div class="container py-4" style="max-width: 480px;">
+    <h2 class="mb-4">Edit tag</h2>
+    @await Html.PartialAsync("_TagForm", Model)
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

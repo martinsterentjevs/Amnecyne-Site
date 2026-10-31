@@ -12,10 +12,6 @@ public class DbService(AppDbContext db)
         return db.Projects.ToListAsync();
     }
     
-    internal Task<Project?> GetBySlugId(string slug)
-    {
-        return db.Projects.FirstOrDefaultAsync(p => p.Slug == slug);
-    }
     /*internal Task<List<ProjectCardViewModel>> GetByTagAsync(string tag)
     {
         return db.Projects
@@ -280,5 +276,51 @@ internal async Task DeleteChangelogEntryAsync(Guid id)
     if (entry is null) return;
     db.ChangelogEntries.Remove(entry);
     await db.SaveChangesAsync();
+}
+internal Task<Tag?> GetTagByIdAsync(Guid id)
+{
+    return db.Tags.FirstOrDefaultAsync(t => t.Id == id);
+}
+
+internal async Task<Tag> CreateTagAsync(TagFormViewModel vm)
+{
+    var tag = new Tag { Id = Guid.NewGuid(), Name = vm.Name, Slug = vm.Slug };
+    db.Tags.Add(tag);
+    await db.SaveChangesAsync();
+    return tag;
+}
+
+internal async Task UpdateTagAsync(Guid id, TagFormViewModel vm)
+{
+    var tag = await db.Tags.FindAsync(id);
+    if (tag is null) return;
+    tag.Name = vm.Name;
+    tag.Slug = vm.Slug;
+    await db.SaveChangesAsync();
+}
+
+internal async Task DeleteTagAsync(Guid id)
+{
+    var tag = await db.Tags.FindAsync(id);
+    if (tag is null) return;
+    db.Tags.Remove(tag);
+    await db.SaveChangesAsync();
+}
+
+internal Task<Project?> GetBySlugId(string slug)
+{
+    return db.Projects
+        .Include(p => p.Tags)
+        .Include(p => p.Images.OrderBy(i => i.SortOrder))
+        .Include(p => p.Releases.OrderByDescending(r => r.ReleaseDate))
+        .Include(p => p.BlogPosts.OrderByDescending(b => b.PublishedAt))
+        .FirstOrDefaultAsync(p => p.Slug == slug);
+}
+
+internal Task<BlogPost?> GetBlogPostBySlugAsync(string projectSlug, string postSlug)
+{
+    return db.BlogPosts
+        .Include(b => b.Project)
+        .FirstOrDefaultAsync(b => b.Slug == postSlug && b.Project!.Slug == projectSlug);
 }
 }
