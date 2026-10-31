@@ -1,0 +1,6 @@
+@model Amnecyne.Models.BlogPostFormViewModel
+<div class="container py-4" style="max-width: 640px;">
+    <h2 class="mb-4">Edit blog post</h2>
+    @await Html.PartialAsync("_BlogPostForm", Model)
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

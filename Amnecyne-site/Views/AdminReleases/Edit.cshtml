@@ -1,0 +1,6 @@
+@model Amnecyne.Models.ReleaseFormViewModel
+<div class="container py-4" style="max-width: 640px;">
+    <h2 class="mb-4">Edit release</h2>
+    @await Html.PartialAsync("_ReleaseForm", Model)
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

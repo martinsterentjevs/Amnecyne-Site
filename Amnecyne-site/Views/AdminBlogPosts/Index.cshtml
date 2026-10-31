@@ -1,0 +1,39 @@
+@model List<Amnecyne.DataModels.BlogPost>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Blog posts</h1>
+        <a href="/admin/blog/create" class="btn btn-primary">New post</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table project-accent-table table-hover align-middle border-top">
+                <thead class="table-light">
+                <tr><th>Project</th><th>Title</th><th>Published</th><th class="text-end">Actions</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr style="--project-color: @b.Project?.PrimaryColor;">
+                        <td class="fw-bold"><span class="project-accent-dot"></span>@b.Project?.Name</td>
+                        <td>@b.Title</td>
+                        <td>@b.PublishedAt.ToString("yyyy-MM-dd")</td>
+                        <td class="text-end">
+                            <a href="/admin/blog/@b.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
+                            <form method="post" action="/admin/blog/@b.Id/delete" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No posts yet.</div>
+    }
+</div>

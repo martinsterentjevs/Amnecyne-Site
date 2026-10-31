@@ -1,0 +1,39 @@
+@model List<Amnecyne.DataModels.ProjectRelease>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Releases</h1>
+        <a href="/admin/releases/create" class="btn btn-primary">New release</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table project-accent-table table-hover align-middle border-top">
+                <thead class="table-light">
+                <tr><th>Project</th><th>Version</th><th>Date</th><th class="text-end">Actions</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr style="--project-color: @r.Project?.PrimaryColor;">
+                        <td class="fw-bold"><span class="project-accent-dot"></span>@r.Project?.Name</td>
+                        <td>@r.Version</td>
+                        <td>@r.ReleaseDate.ToString("yyyy-MM-dd")</td>
+                        <td class="text-end">
+                            <a href="/admin/releases/@r.Id/edit" class="btn btn-sm btn-outline-dark">Edit</a>
+                            <form method="post" action="/admin/releases/@r.Id/delete" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No releases yet.</div>
+    }
+</div>

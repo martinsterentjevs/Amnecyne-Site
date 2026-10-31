@@ -1,0 +1,11 @@
+@model Guid
+@{
+    var items = (List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)ViewData["EntityReferenceOptions"]!;
+    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+}
+<select name="@name" id="@name" class="form-select">
+    @foreach (var item in items)
+    {
+        <option value="@item.Value" selected="@(item.Value == Model.ToString())">@item.Text</option>
+    }
+</select>

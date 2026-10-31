@@ -1,0 +1,35 @@
+@model Amnecyne.Models.BlogPostFormViewModel
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="ProjectId" class="form-label"></label>
+        @Html.EditorFor(m => m.ProjectId)
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Slug" class="form-label"></label>
+        <input asp-for="Slug" class="form-control" />
+        <span asp-validation-for="Slug" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Body" class="form-label"></label>
+        <textarea asp-for="Body" class="form-control" rows="10"></textarea>
+        <span asp-validation-for="Body" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-4">
+        <label asp-for="PublishedAt" class="form-label"></label>
+        <input asp-for="PublishedAt" class="form-control" type="date" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
