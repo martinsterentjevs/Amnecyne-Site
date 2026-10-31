@@ -71,6 +71,8 @@ namespace Amnecyne.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("ChangelogEntries");
                 });
 
@@ -216,6 +218,17 @@ namespace Amnecyne.Migrations
                 {
                     b.HasOne("Amnecyne.DataModels.Project", "Project")
                         .WithMany("BlogPosts")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Amnecyne.DataModels.ChangelogEntry", b =>
+                {
+                    b.HasOne("Amnecyne.DataModels.Project", "Project")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
